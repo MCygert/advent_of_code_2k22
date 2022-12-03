@@ -1,49 +1,77 @@
-import string
 
-alphabet_lower = list(string.ascii_lowercase)
-alphabet_higher = list(string.ascii_uppercase)
+# a -> Rock
+# b -> Paper
+# c -> Scissors
+# SECOND  COLUMN
+# x -> ROCK
+# y -> PAPER
+# z -> SCISSORS
 
-with open('input.txt', 'r') as f:
-    lines = [line.rstrip() for line in f]
+# rock -> 1
+# paper -> 2
+# scissors -> 3
 
+# 0 lose
+# 3 draw
+# 6 win
+def choose_hand(line: str):
+    first = line[0]
+    second = line[2]
 
-def split(input: str):
-    n = len(input)
-    string1 = input[0:n//2]
-    string2 = input[n//2:]
-    return string1, string2
-
-
-# def intersection(first: str, second: str) -> str:
-#    return ''.join(set(first).intersection(second))
-
-
-def intersection_three_lines(first: str, second: str, third: str) -> str:
-    return set(first) & set(second) & set(third)
-
-
-def sum_characters(same_letters: str) -> int:
-    sum = 0
-    for char in intersection:
-        if char.islower():
-            sum += alphabet_lower.index(char) + 1
+    if second == "X":
+        if first == "A":
+            return first, "Z"
+        elif first == "B":
+            return first, "X"
         else:
-            sum += alphabet_higher.index(char) + 27
+            return first, "Y"
+
+    elif second == "Y":
+        if first == "A":
+            return first, "X"
+        elif first == "B":
+            return first, "Y"
+        else:
+            return first, "Z"
+    else:
+        if first == "A":
+            return first, "Y"
+        elif first == "B":
+            return first, "Z"
+        else:
+            return first, "X"
+
+
+def calculate_winner(first: str, second: str) -> int:
+    points = {
+        "Y": 2,
+        "X": 1,
+        "Z": 3
+    }
+
+    sum = 0
+    if (first == "A" and second == "X") or (first == "B" and second == "Y") or (first == "C" and second == "Z"):
+        sum += 3
+    elif first == "A" and second == "Z":
+        sum += 0
+    elif first == "B" and second == "X":
+        sum += 0
+    elif first == "C" and second == "Y":
+        sum += 0
+    else:
+        sum += 6
+
+    print(f"sum from win ${sum}")
+    sum += points[second]
+    print(f"sum with chosen type {sum}")
     return sum
 
 
 if __name__ == "__main__":
-    sum = 0
-    number_of_lines = 0
-    tmp = []
-    for line in lines:
-        # first_half, second_half = split(line)
-        # common_characters = intersection(first_half, second_half)
-        number_of_lines += 1
-        tmp.append(line)
-        if number_of_lines == 3:
-            intersection = intersection_three_lines(tmp[0], tmp[1], tmp[2])
-            sum += sum_characters(intersection)
-            number_of_lines = 0
-            tmp.clear()
-    print(sum)
+    solution = 0
+    with open('input.txt') as f:
+        for line in f:
+            first, second = choose_hand(line)
+            print(f"{first}, {second}")
+            solution += calculate_winner(first, second)
+    print(solution)
