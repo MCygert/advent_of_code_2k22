@@ -13,17 +13,8 @@ if __name__ == "__main__":
     count = 0
     for line in lines:
         b_f_r, e_f_r, b_s_r, e_s_r = split(line)
-        first = [item for item in range(b_f_r, e_f_r+1)]
-        second = [item for item in range(b_s_r, e_s_r+1)]
-        if len(first) > len(second):
-            solution = list(set(second) & set(first))
-            if solution == second:
-                count += 1
-        elif len(first) < len(second):
-            solution = list(set(second) & set(first))
-            if solution == first:
-                count += 1
-        else:
-            if second == first:
-                count += 1
+        # if(b_f_r <= b_s_r or e_f_r >= e_s_r) or (b_s_r <= b_f_r or e_s_r >= e_f_r):
+        #    count += 1
+        if set(range(b_f_r, e_f_r + 1)) & set(range(b_s_r, e_s_r + 1)):
+            count += 1
     print(count)
